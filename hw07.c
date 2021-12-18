@@ -99,7 +99,8 @@ void set_pixel(TGAImage *self, int x, int y, RGBA *pix){
 
 
 
-//DRAWING DIGIT FUNCTIONS
+//DRAWING FUNCTIONS
+//background
 void draw_bg(TGAImage *self, RGBA *bg){
     for (int i = 0; i < tga_height(self); i++)
     {
@@ -113,7 +114,7 @@ void draw_bg(TGAImage *self, RGBA *bg){
 
 }
 
-
+//digits
 void draw_one(TGAImage *self, int dx, int dy, RGBA *pix){
     for (int i = 0 + dx; i < 195 + dx; i++)
     {
@@ -128,7 +129,7 @@ void draw_one(TGAImage *self, int dx, int dy, RGBA *pix){
     }
 }
 
-//zatim dela to stejne co draw_one
+//zatim dela to stejne co draw_one ()
 void draw_zero(TGAImage *self, int dx, int dy, RGBA *pix){
     for (int i = 0 + dx; i < 195 + dx; i++)
     {
@@ -144,7 +145,7 @@ void draw_zero(TGAImage *self, int dx, int dy, RGBA *pix){
 }
 
 
-//task functions
+//TASK functions
 void watch_draw_time(TGAImage* self, const int hours, const int minutes){
 
     FILE *file = fopen("aw.tga","wb");
@@ -181,7 +182,7 @@ void watch_draw_time(TGAImage* self, const int hours, const int minutes){
 }
 
 
-//POTREBUJU INIT BRIGHTNESS NENI TO pro cernobile nebo c oto kurva je
+//tady vytvarim vlastni struktury a nastavuju jejich hodnoty > PRAVDEPODOBNE PROBLE ZDE NEKDE
 TGAImage *tga_new(const int height, const int width){
     TGAImage *tga = (TGAImage*)malloc(sizeof(TGAImage));// heap allocation for the whole image
  
