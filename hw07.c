@@ -179,10 +179,10 @@ void watch_draw_time(TGAImage* self, const int hours, const int minutes){
     func_array[secondMin](self, 184, 224, &fg);  uncomment az bude fungovat*/
 
     //write it all in the file
-    int writeCount = fwrite( &self->header, sizeof (TGAheader),1,file); //velikost prvku je header celej a je jen jeden
+    int writeCount = fwrite( &self->header, sizeof (TGAheader),1,file); //tady adresu &self->header, pack je to primo clen ("hodnota")
     assert(writeCount == 1);
 
-    writeCount = fwrite(&self->data, sizeof(RGBA), tga_width(self) * tga_height(self),file);
+    writeCount = fwrite(self->data, sizeof(RGBA), tga_width(self) * tga_height(self),file); //tady NE adresu &self primo ten clen je vlastne ukazatel na misto co chci zapisovat 
 
     fclose(file);
 }
