@@ -90,8 +90,8 @@ int to1D(int row, int col, int cols){
 
 //SET ALL 4 ATRIBUTES OF SINGLE PIXEL
 void set_pixel(TGAImage *self, int x, int y, RGBA *pix){
-    int height = tga_height(self);
-    self->data[to1D(y,x,height)] = *pix; //plocha kopie, jde pac nejsou ukazatel
+    int width = tga_width(self);
+    self->data[to1D(x,y,width)] = *pix; //plocha kopie, jde pac nejsou ukazatel
 
     /*self->data[to1D(y,x, tga_height(self))].alpha = pix->alpha;
     self->data[to1D(y,x, tga_height(self))].blue = pix->blue;
@@ -119,8 +119,21 @@ void draw_bg(TGAImage *self, RGBA *bg){
 
 }
 
+
+void draw(TGAImage *self, int x_start, int x_end, int y_start, int y_end, RGBA *pix){
+    for (int i = x_start; i < x_end; i++)
+    {
+        for (int j = y_start; j < y_end; j++)
+        {
+                set_pixel(self, i, j, pix);
+                printf("one: i:%d j:%d\n",i ,j);
+        }
+    }
+}
+
+
 //digits
-void draw_one(TGAImage *self, int dx, int dy, RGBA *pix){
+/*void draw_one(TGAImage *self, int dx, int dy, RGBA *pix){
     for (int i = 0 + dx; i < 195 + dx; i++)
     {
         for (int j = 0 + dx; j < 169 + dy; j++)
@@ -132,6 +145,10 @@ void draw_one(TGAImage *self, int dx, int dy, RGBA *pix){
             }
         }
     }
+}*/
+
+void draw_one(TGAImage *self, int dx, int dy, RGBA *pix){
+   draw (self, dx + 15, dx + 195, dy + 139, dy + 169, pix);
 }
 
 //zatim dela to stejne co draw_one ()
@@ -174,9 +191,9 @@ void watch_draw_time(TGAImage* self, const int hours, const int minutes){
 
     //function calling based on individual digit (dx, dy prirustky podle toho kera/kde je cislice na ciferniku)
     func_array[firstH](self, 0, 0, &fg);
-  //  func_array[secondH](self, 184, 0, &fg);
-  //  func_array[firstMin](self, 0, 224, &fg);
-  //  func_array[secondMin](self, 184, 224, &fg);  //uncomment az bude fungovat
+    func_array[secondH](self, 0, 184, &fg);
+    func_array[firstMin](self, 239, 0, &fg);
+    func_array[secondMin](self, 239, 184, &fg);  //uncomment az bude fungovat
 
     //write it all in the file
     int writeCount = fwrite( &self->header, sizeof (TGAheader),1,file); //tady adresu &self->header, pack je to primo clen ("hodnota")
@@ -227,6 +244,21 @@ void tga_free(TGAImage **self){
 
 }
 
+typedef struct {
+    int x1;
+    int y1;
+    int x2;
+    int y2;
+} Rect;
+
+void draw_rect( TGAImage * tga, const Rect * r, RGBA* pix ) {
+    for ( int y = r->y1; y < r->y2; y++ ) {
+        for ( int x = r->x1; x < r->x2; x++ ) {
+            set_pixel( tga, x, y, pix );
+        }
+    }
+}
+
 
 int main(int argc, char **argv){
     int hours = 0;
@@ -236,11 +268,11 @@ int main(int argc, char **argv){
     {
         return 1;
     }
-    else
-    {
-        hours = atoi(argv[1]);
-        minutes = atoi(argv[2]);
-    }
+    
+    
+    hours = atoi(argv[1]);
+    minutes = atoi(argv[2]);
+    
 
     
 
@@ -255,6 +287,9 @@ int main(int argc, char **argv){
     
     draw_bg(self, &bg);
 
+    /*Rect r = { 20, 20, 80, 100 };
+
+    draw_rect( self, &r, &fg );*/
 
     watch_draw_time(self,hours, minutes);
 
