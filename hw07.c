@@ -97,11 +97,6 @@ int to1D(int row, int col, int cols){
 void set_pixel(TGAImage *self, int x, int y, RGBA *pix){
     int width = tga_width(self);
     self->data[to1D(x,y,width)] = *pix; //plocha kopie, jde pac nejsou ukazatel
-
-    /*self->data[to1D(y,x, tga_height(self))].alpha = pix->alpha;
-    self->data[to1D(y,x, tga_height(self))].blue = pix->blue;
-    self->data[to1D(y,x, tga_height(self))].green = pix->green;
-    self->data[to1D(y,x, tga_height(self))].red = pix->red;*/
 }
 
 
@@ -218,7 +213,7 @@ void draw_nine(TGAImage *self, int dx, int dy, RGBA *pix){
 
 
 
-//TASK functions
+//TASK function 1
 void watch_draw_time(TGAImage* self, const int hours, const int minutes){
 
     FILE *file = fopen("aw.tga","wb");
@@ -260,7 +255,7 @@ void watch_draw_time(TGAImage* self, const int hours, const int minutes){
     fclose(file);
 }
 
-
+//TASK function 2 with pixels parameters
 void watch_draw_time_color(TGAImage* self, const int hours, const int minutes, const RGBA* fg_color, const RGBA* bg_color){
 
     FILE *file = fopen("aw.tga","wb");
@@ -338,7 +333,6 @@ void tga_free(TGAImage **self){
     (*self)->data = NULL;
     free(*self);
     *self = NULL;
-
 }
 
 
@@ -347,11 +341,10 @@ int main(int argc, char **argv){
     int hours = 0;
     int minutes = 0;
 
-    if (argc != 3)
-    {
+    if (argc != 3){
+    
         return 1;
     }
-    
     
     hours = atoi(argv[1]);
     minutes = atoi(argv[2]);
